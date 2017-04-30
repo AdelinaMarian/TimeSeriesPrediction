@@ -2,6 +2,7 @@ package timeseries;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -47,9 +48,10 @@ public class TimeSeriesPrediction {
 
 			while (temperatureCursor.hasNext()) {
 				DBObject temperature = temperatureCursor.next();
-				trainingData.put(simpleDateFormat.parse(temperature.get("timestamp").toString()),
-						((Number) temperature.get("sensorValue")).doubleValue());
-
+				if (!Arrays.asList("2015-10-01 11:15:00").contains(temperature.get("timestamp").toString())) {
+					trainingData.put(simpleDateFormat.parse(temperature.get("timestamp").toString()),
+							((Number) temperature.get("sensorValue")).doubleValue());
+				}
 			}
 
 			Integer index = 0;
@@ -72,7 +74,7 @@ public class TimeSeriesPrediction {
 
 			HoltWinters holtWinters = new HoltWinters(values);
 			Map<Integer, Double> forecastedValues = holtWinters.forecast();
-			// System.out.println(forecastedValues);
+			System.out.println(forecastedValues);
 
 			for (Map.Entry<Integer, Double> forecasted : forecastedValues.entrySet()) {
 				plot.update(new BasicDBObject("index", forecasted.getKey() + 1), new BasicDBObject("$set",

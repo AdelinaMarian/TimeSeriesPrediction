@@ -9,7 +9,7 @@
 <script type="text/javascript">
 var chartData;
 $.ajax({
-    url: 'http://127.0.0.1:28017/timeseries/plot/',
+    url: 'http://127.0.0.1:28017/timeseries/plot/?limit=0',
     type: 'GET',
     success: function(response) {
     	chartData = $.parseJSON(response)['rows']
@@ -19,20 +19,23 @@ $.ajax({
     	    "theme": "light",
     	    "dataProvider": chartData,
     	    "valueAxes": [{
+    	    	"title": "Ext_Tem",
     	        "axisAlpha": 0,
     	        "dashLength": 4,
     	        "position": "left"
     	    }],
-    	    "graphs": [{
+    	    "graphs": [
+    	    {
+    	        "bulletSize": 5,
+    	        "title": "Measured value",
+    	        "valueField": "measured",
+    	        "bullet":"square",
+    	        "balloonText":"<div style='margin:10px; text-align:left;'><span style='font-size:13px'>[[category]]</span><br><span style='font-size:18px'>Value:[[value]]</span>",
+    	    }, {
+    	    	"title": "Forecasted value",
     	        "bulletSize": 5,
     	        "valueField": "forecasted",
     	        "bullet":"round",
-    	        "balloonText":"<div style='margin:10px; text-align:left;'><span style='font-size:13px'>[[category]]</span><br><span style='font-size:18px'>Value:[[value]]</span>",
-    	    }, 
-    	    {
-    	        "bulletSize": 5,
-    	        "valueField": "measured",
-    	        "bullet":"square",
     	        "balloonText":"<div style='margin:10px; text-align:left;'><span style='font-size:13px'>[[category]]</span><br><span style='font-size:18px'>Value:[[value]]</span>",
     	    }],
     	    "chartCursor": {
@@ -46,13 +49,20 @@ $.ajax({
     	    "autoMargins": true,
     	    "categoryField": "index",
     	    "categoryAxis": {
+    	    	"title": "Series data point",
     	        "axisAlpha": 0,
     	        "gridAlpha": 0,
     	        "tickLength": 0
     	    },
+    	    "legend": {
+    	    	"align": "center", 
+    	    	"valueWidth": 200,
+    	    	
+    	    },
     	    "chartScrollbar":{},
     	    "export": {
-    	        "enabled": true
+    	        "enabled": true, 
+    	        "labelText": "[[title]]"
     	    }
     	});
     }
