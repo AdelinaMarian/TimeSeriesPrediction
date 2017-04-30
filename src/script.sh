@@ -1,0 +1,1 @@
+FOR %i IN (D:\MASTER\PDI\data2\*.*) DO mongoimport --db timeseries --collection sensordata --type json --file %i

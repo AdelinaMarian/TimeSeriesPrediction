@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="amcharts/amcharts.js"></script>
+<script src="amcharts/serial.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<title>Prediction chart</title>
+
+<script type="text/javascript">
+var chartData;
+$.ajax({
+    url: 'http://127.0.0.1:28017/timeseries/plot/',
+    type: 'GET',
+    success: function(response) {
+    	chartData = $.parseJSON(response)['rows']
+    	console.log(chartData);
+    	var chart = AmCharts.makeChart("predictionChart", {
+    	    "type": "serial",
+    	    "theme": "light",
+    	    "dataProvider": chartData,
+    	    "valueAxes": [{
+    	        "axisAlpha": 0,
+    	        "dashLength": 4,
+    	        "position": "left"
+    	    }],
+    	    "graphs": [{
+    	        "bulletSize": 5,
+    	        "valueField": "forecasted",
+    	        "bullet":"round",
+    	        "balloonText":"<div style='margin:10px; text-align:left;'><span style='font-size:13px'>[[category]]</span><br><span style='font-size:18px'>Value:[[value]]</span>",
+    	    }, 
+    	    {
+    	        "bulletSize": 5,
+    	        "valueField": "measured",
+    	        "bullet":"square",
+    	        "balloonText":"<div style='margin:10px; text-align:left;'><span style='font-size:13px'>[[category]]</span><br><span style='font-size:18px'>Value:[[value]]</span>",
+    	    }],
+    	    "chartCursor": {
+    	        "graphBulletSize": 1.5,
+    	     	"zoomable":true,
+    	         "cursorAlpha":0,
+    	         "valueLineEnabled":true,
+    	         "valueLineBalloonEnabled":true,
+    	         "valueLineAlpha":0.2
+    	    },
+    	    "autoMargins": true,
+    	    "categoryField": "index",
+    	    "categoryAxis": {
+    	        "axisAlpha": 0,
+    	        "gridAlpha": 0,
+    	        "tickLength": 0
+    	    },
+    	    "chartScrollbar":{},
+    	    "export": {
+    	        "enabled": true
+    	    }
+    	});
+    }
+});
+
+</script>
+
+</head>
+<body>
+
+
+<h1>Time series prediction</h1>
+
+<div id="predictionChart" style="width: 1800px; height: 800px;"></div>
+
+</body>
+</html>
